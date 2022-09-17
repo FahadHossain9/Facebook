@@ -1,0 +1,24 @@
+.addstory{
+    position: relative;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: red;
+    min-width: 150px;
+    width: 150px;
+    height: 250px;
+    border-radius: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: transform 100ms ease-in;
+    box-shadow: 0px 5px 17px -7px rgba(0 ,0, 0, 0.75);
+   
+}
+
+.addbutton{
+    position: absolute;
+    bottom: 10px;
+    left: 20px;
+    color: white;
+}
+
+

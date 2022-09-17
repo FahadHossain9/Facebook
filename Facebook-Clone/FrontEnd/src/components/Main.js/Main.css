@@ -1,0 +1,10 @@
+*{
+    margin: 0px;
+  }
+  .app__body{
+    display: flex;
+  
+  }
+  .main{
+    background-color: #f1f2f5;
+  }

@@ -1,0 +1,86 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx:latest
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+    volumes:
+      - ./nginx.conf:/etc/nginx/default.conf
+    depends_on:
+      - user_service
+      - status_service
+      - story_service
+  
+  client:
+    image: client
+    build: ./FrontEnd
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    depends_on:
+      - nginx
+
+
+  user_service:
+    build: ./Microservice/Authentication
+    restart: unless-stopped
+    depends_on:
+      - db_user
+
+  status_service:
+    build: ./Microservice/Post
+    restart: unless-stopped
+    depends_on:
+      - db_status
+      - user_service
+
+
+  story_service:
+    build: ./Microservice/story
+    restart: unless-stopped
+    depends_on:
+      - db_story
+      - user_service
+      - storyobjectdb
+
+  db_user:
+    image: mongo:4.2
+    restart: unless-stopped
+    ports:
+      - 4000:27017
+    volumes: 
+      - user:/data/db
+
+  db_status:
+    image: mongo:4.2
+    restart: unless-stopped
+    volumes: 
+      - status:/data/db
+
+  db_story:
+    image: mongo:4.2
+    restart: unless-stopped
+    volumes: 
+      - story:/data/db
+
+
+  storyobjectdb:
+    image: minio/minio:latest
+    restart: unless-stopped
+
+    ports:
+      - 9001:9001
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    command: server --console-address ":9001" /data
+    volumes:
+      - minio_data:/data
+
+volumes:
+  user:
+  status:
+  story:
+  minio_data:
